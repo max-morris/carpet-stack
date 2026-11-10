@@ -5,12 +5,15 @@
 # ET_2026_05 release line, and later updates on that line are v2026.5.1, v2026.5.2, ... (the
 # last number counts this stack's own updates, not the ET's vN).
 #
-# This commit is the release tagged v2026.5.0.
-# pin-tag pins every repo at its ET_2026_05_v0 tag (all of them have it), so for the repos it
-# shares with et/et-stack@2026.5.0 this release is that release, commit for commit.
+# Nothing is pinned here: @head follows the branches the thornlist names, and each tag freezes
+# their heads at the moment it is pushed. The first release (2026.5.0) pinned every repo at its
+# ET_2026_05_v0 tag; see the commit that tag points at.
 #
-# The next commit on this branch drops pin-tag and those pins: from then on @head follows the
-# branches the thornlist names, and a future tag freezes their heads at that moment.
+# To hold one repo back when tagging, pin it first:
+#
+#     [[stack.pin]]
+#     name = "CarpetX"            # the repo's name as the thornlist derives it
+#     tag = "ET_2026_05_v0"       # or commit = "<40 hex digits>"
 format = 1
 
 [stack]
@@ -27,4 +30,4 @@ initial data.
 """
 contact = "https://github.com/EinsteinToolkit/tickets/issues"
 thornlist = "carpet.th"
-pin-tag = "ET_2026_05_v0"
+
