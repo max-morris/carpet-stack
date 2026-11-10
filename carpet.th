@@ -1,0 +1,159 @@
+# carpet.th: the smallest thornlist that builds and runs Carpet codes.
+#
+# Published on the Cactarium as the stack et/carpet-stack (cactarium-stack.toml next to this file;
+# the name avoids a clash with the package et/carpet). It builds the Carpet driver with its I/O,
+# reduction, interpolation and regridding thorns, the Cactus infrastructure every Carpet run
+# activates (grid, boundaries, symmetries, the method of lines), the base thorns that define the
+# spacetime and matter variables (ADMBase, HydroBase, TmunuBase), and the common analysis
+# infrastructure: the apparent horizon finder with its spherical surfaces, multipole
+# decomposition, and the puncture tracker. Evolution codes, initial data and Psi4 calculators are
+# left to the stacks that extend this one, so it is the Carpet counterpart of et/carpetx-stack.
+#
+# Every repo follows the Einstein Toolkit's ET_2026_05 release branch, and each Cactarium release
+# pins it to a commit (the first, 2026.5.0, pinned every repo at its ET_2026_05_v0 tag, matching
+# et/et-stack@2026.5.0). Thorns are a subset of the release's, in the release's sections.
+#
+# Dependency closure (configuration.ccl REQUIRES / REQUIRES THORNS, interface.ccl INHERITS /
+# FRIEND / REQUIRES FUNCTION, param.ccl SHARES) was checked against the thorns' CCL files at the
+# pinned commits; see validate/report.txt in the artifacts this was prepared with.
+
+!CRL_VERSION = 1.0
+
+!DEFINE ROOT = Cactus
+!DEFINE ARR  = $ROOT/arrangements
+!DEFINE COMPONENTLIST_TARGET = $ROOT/thornlists/
+
+!DEFINE ET_RELEASE = ET_2026_05
+
+
+# Cactus Flesh
+!TARGET   = $ROOT
+!TYPE     = git
+!URL      = https://bitbucket.org/cactuscode/cactus.git
+!REPO_BRANCH = $ET_RELEASE
+!NAME     = flesh
+!CHECKOUT = .clang-format CONTRIBUTORS COPYRIGHT doc lib Makefile README.md src
+
+
+# CactusBase thorns
+!TARGET   = $ARR
+!TYPE     = git
+!URL      = https://bitbucket.org/cactuscode/cactusbase.git
+!REPO_BRANCH = $ET_RELEASE
+!REPO_PATH= $2
+!CHECKOUT =
+CactusBase/Boundary
+CactusBase/CartGrid3D
+CactusBase/CoordBase
+CactusBase/InitBase
+CactusBase/IOUtil
+CactusBase/SymBase
+CactusBase/Time
+
+
+# CactusNumerical thorns
+!TARGET   = $ARR
+!TYPE     = git
+!URL      = https://bitbucket.org/cactuscode/cactusnumerical.git
+!REPO_BRANCH = $ET_RELEASE
+!REPO_PATH= $2
+!CHECKOUT =
+CactusNumerical/Dissipation
+CactusNumerical/LocalInterp
+CactusNumerical/LocalReduce
+CactusNumerical/MoL
+CactusNumerical/ReflectionSymmetry
+CactusNumerical/RotatingSymmetry180
+CactusNumerical/RotatingSymmetry90
+CactusNumerical/Slab
+CactusNumerical/SpaceMask
+CactusNumerical/SphericalSurface
+
+
+# CactusUtils thorns: run-time tools every production run uses
+!TARGET   = $ARR
+!TYPE     = git
+!URL      = https://bitbucket.org/cactuscode/cactusutils.git
+!REPO_BRANCH = $ET_RELEASE
+!REPO_PATH= $2
+!CHECKOUT =
+CactusUtils/NaNChecker
+CactusUtils/SystemTopology
+CactusUtils/TerminationTrigger
+CactusUtils/TimerReport
+CactusUtils/Trigger
+CactusUtils/Vectors
+
+
+# Carpet, the AMR driver
+!TARGET   = $ARR
+!TYPE     = git
+!URL      = https://github.com/einsteintoolkit/Carpet.git
+!REPO_BRANCH = $ET_RELEASE
+!REPO_PATH= $2
+!CHECKOUT = Carpet/doc
+Carpet/Carpet
+Carpet/CarpetInterp
+Carpet/CarpetInterp2
+Carpet/CarpetIOASCII
+Carpet/CarpetIOBasic
+Carpet/CarpetIOHDF5
+Carpet/CarpetIOScalar
+Carpet/CarpetLib
+Carpet/CarpetMask
+Carpet/CarpetReduce
+Carpet/CarpetRegrid2
+Carpet/CarpetSlab
+Carpet/CarpetTracker
+Carpet/CycleClock
+Carpet/LoopControl
+Carpet/Timers
+
+
+# EinsteinAnalysis
+!TARGET   = $ARR
+!TYPE     = git
+!URL      = https://bitbucket.org/einsteintoolkit/einsteinanalysis.git
+!REPO_BRANCH = $ET_RELEASE
+!REPO_PATH= $2
+!CHECKOUT =
+EinsteinAnalysis/AHFinderDirect
+EinsteinAnalysis/Multipole
+EinsteinAnalysis/PunctureTracker
+
+
+# EinsteinBase
+!TARGET   = $ARR
+!TYPE     = git
+!URL      = https://bitbucket.org/einsteintoolkit/einsteinbase.git
+!REPO_BRANCH = $ET_RELEASE
+!REPO_PATH= $2
+!CHECKOUT =
+EinsteinBase/ADMBase
+EinsteinBase/CoordGauge
+EinsteinBase/HydroBase
+EinsteinBase/StaticConformal
+EinsteinBase/TmunuBase
+
+
+# External libraries
+!TARGET   = $ARR
+!TYPE     = git
+!URL      = https://github.com/EinsteinToolkit/$1-$2
+!REPO_BRANCH = $ET_RELEASE
+!REPO_PATH = ../$1-$2
+!CHECKOUT =
+ExternalLibraries/HDF5
+ExternalLibraries/hwloc
+ExternalLibraries/MPI
+ExternalLibraries/zlib
+
+
+# Numerical: the local interpolator AHFinderDirect and Multipole parfiles name
+!TARGET   = $ARR
+!TYPE     = git
+!URL      = https://bitbucket.org/cactuscode/numerical.git
+!REPO_BRANCH = $ET_RELEASE
+!REPO_PATH= $2
+!CHECKOUT =
+Numerical/AEILocalInterp

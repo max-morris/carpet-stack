@@ -1,0 +1,30 @@
+# The Cactarium stack et/carpet-stack: the smallest thornlist that builds and runs Carpet codes.
+# The name avoids a clash with the package et/carpet (the Carpet repo itself).
+#
+# Tags cut releases, numbered by Einstein Toolkit release: v2026.5.0 is the first, on the
+# ET_2026_05 release line, and later updates on that line are v2026.5.1, v2026.5.2, ... (the
+# last number counts this stack's own updates, not the ET's vN).
+#
+# This commit is the release tagged v2026.5.0.
+# pin-tag pins every repo at its ET_2026_05_v0 tag (all of them have it), so for the repos it
+# shares with et/et-stack@2026.5.0 this release is that release, commit for commit.
+#
+# The next commit on this branch drops pin-tag and those pins: from then on @head follows the
+# branches the thornlist names, and a future tag freezes their heads at that moment.
+format = 1
+
+[stack]
+name = "carpet-stack"
+owners = ["et"]
+description = """
+The smallest thornlist that builds and runs Carpet codes, on the Einstein Toolkit's ET_2026_05 release.
+
+The Carpet driver with its I/O, reduction, interpolation and regridding thorns, the Cactus grid, \
+boundary, symmetry and method-of-lines infrastructure, ADMBase, HydroBase and TmunuBase, and the \
+common analysis thorns: AHFinderDirect with SphericalSurface, Multipole and PunctureTracker. \
+About 50 thorns instead of the release's 300 or so. Extend it with your evolution code and \
+initial data.
+"""
+contact = "https://github.com/EinsteinToolkit/tickets/issues"
+thornlist = "carpet.th"
+pin-tag = "ET_2026_05_v0"
